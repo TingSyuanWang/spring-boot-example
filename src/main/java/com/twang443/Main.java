@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -31,6 +32,15 @@ public class Main {
     @PostMapping()
     public void addCustomer(@RequestBody NewCustomerRequest request) {
         Customer customer = new Customer();
+        customer.setName(request.name());
+        customer.setEmail(request.email());
+        customer.setAge(String.valueOf(request.age()));
+        customerRepository.save(customer);
+    }
+
+    @PutMapping("{customerId}")
+    public void updateCustomer(@PathVariable("customerId") Integer id, @RequestBody NewCustomerRequest request) {
+        Customer customer = customerRepository.findById(id).get();
         customer.setName(request.name());
         customer.setEmail(request.email());
         customer.setAge(String.valueOf(request.age()));
